@@ -1,0 +1,33 @@
+/* src/components/Navbar.css */
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Memisahkan logo dan judul */
+  align-items: center; /* Menjaga agar logo dan teks terpusat secara vertikal */
+  background-color: #1a4d8f;
+  color: white;
+  width: 100%; /* Pastikan navbar memenuhi seluruh lebar */
+  height: 60px;
+  padding: 10px 20px; /* Sesuaikan padding agar tidak terlalu rapat atau longgar */
+  position: fixed; /* Navbar tetap di atas halaman saat di-scroll */
+  top: 0; /* Tempelkan navbar ke atas */
+  left: 0; /* Tempelkan navbar ke kiri */
+  z-index: 1000; /* Agar navbar berada di atas konten lain */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Efek bayangan untuk navbar */
+  border-radius: 0; /* Tidak ada radius sudut agar navbar penuh dengan layar */
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 40px; /* Ukuran logo */
+  margin-right: 10px; /* Jarak logo dan judul */
+}
+
+.navbar-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}

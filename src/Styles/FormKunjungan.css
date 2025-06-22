@@ -1,0 +1,86 @@
+/* src/pages/FormKunjungan.css */
+.form-kunjungan {
+    padding: 20px;
+    background: #fff;
+    max-width: 600px;
+    margin: 80px auto 20px; /* Menambahkan margin atas untuk memberi jarak dengan navbar */
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-kunjungan form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-kunjungan form div {
+    margin-bottom: 15px;
+  }
+  
+  .form-kunjungan form input,
+  .form-kunjungan form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-kunjungan form button {
+    background-color: #1a4d8f;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .form-kunjungan form button:hover {
+    background-color: #163f76;
+  }
+  
+  .success-message {
+    background-color: #e6ffed;
+    color: #1a7f37;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border: 1px solid #a3e4b6;
+    border-left: 6px solid #28a745;
+    border-radius: 6px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 128, 0, 0.05);
+  }
+  
+  .success-message::before {
+    content: "✔️";
+    font-size: 18px;
+  }
+  
+  @media (max-width: 600px) {
+  .form-kunjungan-container {
+    padding: 20px;
+  }
+
+  .form-kunjungan-container h2 {
+    font-size: 20px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .form-kunjungan-container button {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
