@@ -141,6 +141,9 @@ body.no-scroll-home {
 }
 
 @media (max-width: 768px) {
+  body.no-scroll-home {
+    overflow: auto !important; /* Izinkan scroll di mobile */
+  }
   .home-header {
     padding: 40px 10px;
     background-position: center;
