@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react'; // ← tambahkan useEffect di sini
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Home.css';
 import Navbar from '../components/Navbar/Navbar';
 import logo from '../assets/logo.png';
-import batikImage from '../assets/batik.png';
 
 const Home = () => {
   const navigate = useNavigate();
 
-  // ← pindahkan useEffect ke sini, di dalam komponen
   useEffect(() => {
     document.body.classList.add('no-scroll-home');
     return () => {
@@ -17,12 +15,10 @@ const Home = () => {
   }, []);
 
   const handleRoleSelect = (role) => {
-    if (role === 'pengunjung') {
+    if (role === 'guest') {
       navigate('/form-kunjungan');
-    } else if (role === 'admin') {
-      navigate('/login-admin');
-    } else if (role === 'sekretaris') {
-      navigate('/login-sekretaris');
+    } else if (role === 'pegawai') {
+      navigate('/login-pegawai');
     }
   };
 
@@ -41,22 +37,15 @@ const Home = () => {
       </header>
 
       <main className="home-content">
-        <img src={batikImage} alt="Batik kiri" className="batik-left" />
-        <img src={batikImage} alt="Batik kanan" className="batik-right" />
-
         <p className="instruction">Silakan pilih peran Anda:</p>
         <div className="role-cards">
-          <div className="card" onClick={() => handleRoleSelect('pengunjung')}>
-            <h3>📝 Pengunjung</h3>
-            <p>Isi form kunjungan ke Dispora</p>
+          <div className="card" onClick={() => handleRoleSelect('guest')}>
+            <h3>📝 Guest</h3>
+            <p>Isi form kunjungan sebagai tamu</p>
           </div>
-          <div className="card" onClick={() => handleRoleSelect('admin')}>
-            <h3>🔐 Admin</h3>
-            <p>Login untuk mengelola data kunjungan</p>
-          </div>
-          <div className="card" onClick={() => handleRoleSelect('sekretaris')}>
-            <h3>📁 Sekretaris</h3>
-            <p>Validasi dan pantau data kunjungan</p>
+          <div className="card" onClick={() => handleRoleSelect('pegawai')}>
+            <h3>🔐 Pegawai</h3>
+            <p>Login untuk akses sistem internal</p>
           </div>
         </div>
       </main>

@@ -79,43 +79,30 @@ app.put('/api/kunjungan/:id/validasi', (req, res) => {
   });
 });
 
-// Login admin
-app.post('/api/login/admin', (req, res) => {
+// Route Login Pegawai (admin atau sekretaris)
+app.post('/api/login/pegawai', (req, res) => {
   const { username, password } = req.body;
 
-  const query = 'SELECT * FROM user WHERE username = ? AND password = ? AND role = "admin"';
+  const query = 'SELECT * FROM user WHERE username = ? AND password = ? AND role IN ("admin", "sekretaris")';
   db.query(query, [username, password], (err, result) => {
     if (err) {
-      console.error('❌ Login admin gagal:', err);
-      return res.status(500).send('Server error');
+      console.error('❌ Login pegawai gagal:', err);
+      return res.status(500).send('Terjadi kesalahan pada server');
     }
 
     if (result.length === 0) {
       return res.status(401).send('Username atau password salah');
     }
 
-    res.json({ message: 'Login berhasil', user: result[0] });
+    const user = result[0];
+    res.json({
+      message: 'Login berhasil',
+      role: user.role, // ← ini yang digunakan di frontend untuk redirect
+      user
+    });
   });
 });
 
-// Route Login Sekretaris
-app.post('/api/login/sekretaris', (req, res) => {
-  const { username, password } = req.body;
-
-  const query = 'SELECT * FROM user WHERE username = ? AND password = ? AND role = ?';
-  db.query(query, [username, password, 'sekretaris'], (err, result) => {
-    if (err) {
-      console.error('Gagal login:', err);
-      return res.status(500).send('Gagal login');
-    }
-
-    if (result.length === 0) {
-      return res.status(401).send('Username atau password salah');
-    }
-
-    res.json({ message: 'Login berhasil', user: result[0] });
-  });
-});
 
 // Jalankan server
 app.listen(5001, () => {

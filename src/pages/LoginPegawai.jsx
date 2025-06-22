@@ -3,33 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 import '../Styles/Login.css';
 
-const LoginSekretaris = () => {
+const LoginPegawai = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    const response = await fetch('http://localhost:5001/api/login/sekretaris', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
+    try {
+      const response = await fetch('http://localhost:5001/api/login/pegawai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
 
-    if (!response.ok) {
-      alert('Login Sekretaris Gagal');
-      return;
+      if (!response.ok) {
+        alert('Login Pegawai Gagal');
+        return;
+      }
+
+      const data = await response.json();
+      alert(`Login Berhasil sebagai ${data.role}`);
+
+      if (data.role === 'admin') {
+        navigate('/dashboard-admin');
+      } else if (data.role === 'sekretaris') {
+        navigate('/dashboard-sekretaris');
+      } else {
+        alert('Role tidak dikenal');
+      }
+
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Terjadi kesalahan saat login.');
     }
-    const data = await response.json();
-    alert('Login Sekretaris Berhasil!');
-    navigate('/dashboard-sekretaris');
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('Terjadi kesalahan saat login sekretaris.');
-  }
-};
+  };
 
   const handleLupaPassword = () => {
     navigate('/lupa-password');
@@ -38,7 +47,7 @@ const LoginSekretaris = () => {
   return (
     <div className="login-page">
       <Navbar />
-      <h2>Login Sekretaris</h2>
+      <h2>Login Pegawai</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Username / Email :</label>
@@ -72,4 +81,4 @@ const LoginSekretaris = () => {
   );
 };
 
-export default LoginSekretaris;
+export default LoginPegawai;
