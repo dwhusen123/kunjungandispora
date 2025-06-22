@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../Styles/Home.css';
 import Navbar from '../components/Navbar/Navbar';
 import logo from '../assets/logo.png';
+import { FaUserAlt, FaSignInAlt } from 'react-icons/fa';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -40,12 +41,12 @@ const Home = () => {
         <p className="instruction">Silakan pilih peran Anda:</p>
         <div className="role-cards">
           <div className="card" onClick={() => handleRoleSelect('guest')}>
-            <h3>📝 Guest</h3>
-            <p>Isi form kunjungan sebagai tamu</p>
+            <h3><FaUserAlt style={{ marginRight: '8px' }} /> Guest</h3>
+            <p>Isi form kunjungan ke Dispora</p>
           </div>
           <div className="card" onClick={() => handleRoleSelect('pegawai')}>
-            <h3>🔐 Pegawai</h3>
-            <p>Login untuk akses sistem internal</p>
+            <h3><FaSignInAlt style={{ marginRight: '8px' }} /> Pegawai</h3>
+            <p>Login untuk mengelola dan validasi data kunjungan</p>
           </div>
         </div>
       </main>
