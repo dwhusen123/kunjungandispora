@@ -51,29 +51,39 @@ const FormKunjungan = () => {
     }
   };
 
-  const handleUlasanSubmit = (e) => {
-    e.preventDefault();
+  const handleUlasanSubmit = async (e) => {
+  e.preventDefault();
 
-    const newUlasan = {
-      id: Date.now(),
+  try {
+    const payload = {
       nama,
+      instansi,
       ulasan,
-      rating,
-      tanggal: new Date().toISOString()
+      rating
     };
 
-    const existing = JSON.parse(localStorage.getItem('ulasanList')) || [];
-    localStorage.setItem('ulasanList', JSON.stringify([...existing, newUlasan]));
+    const res = await fetch('http://localhost:5001/api/ulasan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-    resetForm();
+    if (!res.ok) throw new Error('Gagal mengirim ulasan');
+
     setSuccessMessage('✅ Ulasan Anda telah dikirim. Terima kasih atas partisipasi Anda dalam meningkatkan kualitas layanan kami.');
+    resetForm();
     setTimeout(() => setSuccessMessage(''), 5000);
     setFlipped(false);
-  };
+  } catch (err) {
+    console.error('❌ Gagal mengirim ulasan:', err);
+    alert('❌ Gagal mengirim ulasan');
+  }
+};
 
   return (
     <>
       <Navbar />
+<div className="form-kunjungan motion-container">
       <motion.div
         className="form-wrapper"
         initial={{ opacity: 0, y: 40 }}
@@ -154,7 +164,25 @@ const FormKunjungan = () => {
     <h2>Ulasan Pengunjung</h2>
     <form onSubmit={handleUlasanSubmit}>
       <div>
-        <label>Rating (1-5):</label>
+        <label>Nama Pengunjung:</label>
+        <input
+          type="text"
+          value={nama}
+          onChange={(e) => setNama(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Asal Instansi:</label>
+        <input
+          type="text"
+          value={instansi}
+          onChange={(e) => setInstansi(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Rating (1–5):</label>
         <input
           type="number"
           min="1"
@@ -176,7 +204,6 @@ const FormKunjungan = () => {
     </form>
   </motion.div>
 </div>
-
           </div>
         </div>
 
@@ -192,6 +219,7 @@ const FormKunjungan = () => {
           </div>
         </div>
       </motion.div>
+      </div>
     </>
   );
 };

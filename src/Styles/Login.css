@@ -1,181 +1,196 @@
+body {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  font-family: 'Poppins', sans-serif;
+  background: #f4f6f8;
+  margin: 0;
+  padding: 0;
+  scrollbar-gutter: stable;
+}
+
 .login-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #f4f6f8;
+  padding-top: 50px;
   font-family: 'Poppins', sans-serif;
-  padding-top: 36px; /* sedikit turun dari 40px */
+  max-width: 500px;
+  margin: auto;
 }
 
-/* Flip Container */
-.form-flip-container {
+.login-motion-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.login-flip-container {
   perspective: 1200px;
   width: 100%;
-  max-width: 380px; /* dari 420px */
-  height: 360px;     /* dari 400px */
+  height: 450px;
   position: relative;
-  margin-top: 16px;
+  overflow: hidden;
 }
 
-/* Inner wrapper */
-.form-flip-inner {
+.login-flip-inner {
   width: 100%;
   height: 100%;
-  position: relative;
-  transition: transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.6s ease-in-out;
   transform-style: preserve-3d;
+  position: relative;
 }
 
-.form-flip-container.flipped .form-flip-inner {
+.login-flip-container.flipped .login-flip-inner {
   transform: rotateY(180deg);
 }
 
-/* Form Faces */
-.form-face {
+.login-face {
   position: absolute;
   width: 100%;
   height: 100%;
-  padding: 24px; /* dari 30px */
+  padding: 20px;
   box-sizing: border-box;
-  border-radius: 12px;
+  border-radius: 20px;
   background: #ffffff;
   backface-visibility: hidden;
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.2),
-    0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transform: rotateY(0deg);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-face:hover {
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.25),
-    0 6px 10px rgba(0, 0, 0, 0.12);
+.login-face:hover {
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
 }
 
-.form-front {
+.login-front {
+  font-family:Arial, Helvetica, sans-serif;
   z-index: 2;
 }
 
-.form-back {
+.login-back {
   transform: rotateY(180deg);
 }
 
-/* Form Fields */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
 form div {
-  margin-bottom: 12px; /* dari 15px */
+  margin-bottom: 14px;
 }
 
 form label {
-  font-size: 14px; /* dari 16px */
-  color: #333;
+  font-size: 14px;
+  font-weight: 500;
   margin-bottom: 4px;
-  display: block;
-  text-align: left;
 }
 
 form input {
   width: 100%;
-  padding: 10px;       /* dari 12px */
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;     /* dari 16px */
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
 }
 
-/* Submit Button */
+form input:focus {
+  border-color: #1a4d8f;
+  box-shadow: 0 0 0 2px rgba(26, 77, 143, 0.2);
+  outline: none;
+}
+
 form button[type="submit"] {
-  margin-top: 12px;     /* dari 15px */
-  padding: 10px;        /* dari 12px */
-  width: 100%;
-  font-size: 16px;      /* dari 18px */
+  margin-top: 10px;
+  padding: 11px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
   background-color: #1a4d8f;
-  color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 form button[type="submit"]:hover {
   background-color: #163f76;
+  transform: scale(1.02);
 }
 
-/* === SLIDER TOGGLE MODERN === */
-.role-toggle-wrapper {
+.login-toggle-container {
+  margin-top: 20px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  width: 100%;
+}
+
+.login-toggle-switch {
   position: relative;
-  width: 230px;          /* dari 260px */
-  height: 44px;          /* dari 50px */
-  margin-top: 38px;      /* dari 45px */
-  background: linear-gradient(145deg, #e6e6e6, #ffffff);
-  border-radius: 50px;
+  display: flex;
+  width: 240px;
+  height: 34px;
+  background-color: #dbe4f3;
+  border-radius: 17px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  box-shadow: inset -3px -3px 7px rgba(255, 255, 255, 0.8),
-              inset 3px 3px 6px rgba(0, 0, 0, 0.05),
-              0 6px 12px rgba(0, 0, 0, 0.1);
-  transition: background 0.4s ease;
 }
 
-.role-toggle-wrapper .slider {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 110px;          /* dari 124px */
-  height: 38px;          /* dari 44px */
-  background: linear-gradient(to right, #1a4d8f, #2a6bd8);
-  border-radius: 50px;
-  box-shadow: 0 4px 8px rgba(26, 77, 143, 0.4),
-              inset 0 -2px 4px rgba(255, 255, 255, 0.3);
-  transition: all 0.4s ease;
-  z-index: 0;
-}
-
-.role-toggle-wrapper.sekretaris .slider {
-  left: 117px; /* disesuaikan dari 133px */
-}
-
-.role-toggle-wrapper .label {
+.login-toggle-switch button {
   flex: 1;
-  text-align: center;
-  font-size: 13px;       /* dari 14.5px */
+  font-size: 11px;
   font-weight: 600;
-  color: #333;
+  color: #1a4d8f;
+  background: none;
+  border: none;
+  cursor: pointer;
   z-index: 1;
-  user-select: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.3s ease;
+  gap: 5px;
+  transition: color 0.3s ease, font-weight 0.3s ease;
 }
 
-.role-toggle-wrapper .label span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.login-toggle-switch .slider-bg {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, #1a4d8f, #2a71c0);
+  border-radius: 17px;
+  z-index: 0;
+  transition: transform 0.4s ease-in-out;
 }
 
-.role-toggle-wrapper.admin .label:-child {
-  color: #fff;
+.login-toggle-switch.admin .slider-bg {
+  transform: translateX(0%);
 }
 
-.role-toggle-wrapper.sekretaris .label:last-child {
-  color: #333;
+.login-toggle-switch.sekretaris .slider-bg {
+  transform: translateX(100%);
 }
+
+/* Jika Admin aktif */
+.login-toggle-switch.admin .admin-btn {
+  color: #fff !important;
+  font-weight: 700;
+}
+
+/* Jika Sekretaris aktif */
+.login-toggle-switch.sekretaris .sekretaris-btn {
+  color: #fff !important;
+  font-weight: 700;
+}
+
 
 /* Responsive */
 @media (max-width: 500px) {
-  .form-flip-container {
-    max-width: 92%;
-    height: 340px; /* dari 360px */
-  }
-
-  .form-face {
-    padding: 18px;
+  .login-flip-container {
+    height: 380px;
   }
 
   form label {
@@ -183,30 +198,76 @@ form button[type="submit"]:hover {
   }
 
   form input {
-    padding: 9px;
     font-size: 13px;
+    padding: 9px 12px;
   }
 
   form button[type="submit"] {
-    padding: 9px;
-    font-size: 15px;
+    font-size: 14px;
   }
 
-  .role-toggle-wrapper {
+  .login-toggle-wrapper {
     width: 200px;
     height: 40px;
   }
 
-  .role-toggle-wrapper .slider {
+  .login-toggle-wrapper .slider {
     width: 96px;
     height: 34px;
   }
 
-  .role-toggle-wrapper.sekretaris .slider {
+  .login-toggle-wrapper.sekretaris .slider {
     left: 100px;
   }
 
-  .role-toggle-wrapper .label {
+  .login-toggle-wrapper .label {
     font-size: 11.5px;
+  }
+}
+
+@media (max-width: 500px) {
+  .login-page {
+    padding: 20px 12px;
+    margin-top:30px;
+  }
+
+  .login-flip-container {
+    height: 380px;
+  }
+
+  .login-motion-container {
+    padding: 16px;
+  }
+
+  .login-face {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  form label {
+    font-size: 13px;
+  }
+
+  form input {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  form button[type="submit"] {
+    font-size: 14px;
+  }
+
+  .login-toggle-switch {
+    width: 200px;
+    height: 32px;
+  }
+
+  .login-toggle-switch button {
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  .login-toggle-switch .slider-bg {
+    border-radius: 16px;
   }
 }

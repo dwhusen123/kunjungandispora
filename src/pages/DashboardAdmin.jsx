@@ -20,42 +20,56 @@ const DashboardAdmin = () => {
   });
 
 useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        isSidebarOpen &&
-        sidebarRef.current &&
-        !sidebarRef.current.contains(event.target)
-      ) {
-        setIsSidebarOpen(false);
-      }
-    };
+  // Handle klik di luar sidebar untuk menutupnya
+  const handleClickOutside = (event) => {
+    if (
+      isSidebarOpen &&
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target)
+    ) {
+      setIsSidebarOpen(false);
+    }
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isSidebarOpen]);
+  document.addEventListener('mousedown', handleClickOutside);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:5001/api/kunjungan');
-        const data = await response.json();
-        const sorted = data.sort((a, b) => new Date(b.tanggal_kunjungan) - new Date(a.tanggal_kunjungan));
-        setPengunjungData(sorted);
-      } catch (error) {
-        console.error('Gagal mengambil data dari server:', error);
-      }
-    };
+  return () => {
+    document.removeEventListener('mousedown', handleClickOutside);
+  };
+}, [isSidebarOpen]);
 
-    fetchData();
+useEffect(() => {
+  const fetchDataKunjungan = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/kunjungan');
+      const data = await response.json();
+      const sorted = data.sort((a, b) => new Date(b.tanggal_kunjungan) - new Date(a.tanggal_kunjungan));
+      setPengunjungData(sorted);
+    } catch (error) {
+      console.error('❌ Gagal mengambil data kunjungan:', error);
+    }
+  };
 
-    const ulasan = JSON.parse(localStorage.getItem('ulasanList')) || [];
-    setUlasanList(ulasan);
+  const fetchUlasan = async () => {
+    try {
+      const res = await axios.get('http://localhost:5001/api/ulasan');
+      setUlasanList(res.data);
+    } catch (error) {
+      console.error('❌ Gagal mengambil ulasan:', error);
+    }
+  };
 
-    const storedProfile = JSON.parse(localStorage.getItem('adminProfile'));
-    if (storedProfile) setProfile(storedProfile);
-  }, []);
+  // Jalankan keduanya secara paralel
+  fetchDataKunjungan();
+  fetchUlasan();
+
+  // Ambil profil dari localStorage (jika ada)
+  const storedProfile = JSON.parse(localStorage.getItem('adminProfile'));
+  if (storedProfile) {
+    setProfile(storedProfile);
+  }
+}, []);
+
 
   const filteredData = pengunjungData.filter((item) =>
     item.nama?.toLowerCase().includes(search.toLowerCase())
@@ -167,13 +181,21 @@ const handleHapus = async (id) => {
   }
 };
 
-  const handleHapusUlasan = (id) => {
-    const confirmed = window.confirm('Apakah Anda yakin ingin menghapus ulasan ini?');
-    if (!confirmed) return;
-    const updatedUlasan = ulasanList.filter((ulasan) => ulasan.id !== id);
-    setUlasanList(updatedUlasan);
-    localStorage.setItem('ulasanList', JSON.stringify(updatedUlasan));
-  };
+ const handleHapusUlasan = async (id) => {
+  const confirmed = window.confirm('Apakah Anda yakin ingin menghapus ulasan ini?');
+  if (!confirmed) return;
+
+  try {
+    await axios.delete(`http://localhost:5001/api/ulasan/${id}`);
+    const updated = ulasanList.filter((ulasan) => ulasan.id !== id);
+    setUlasanList(updated);
+    alert('✅ Ulasan berhasil dihapus.');
+  } catch (err) {
+    console.error('❌ Gagal menghapus ulasan:', err);
+    alert('❌ Terjadi kesalahan saat menghapus ulasan.');
+  }
+};
+
 
   const renderUlasan = () => (
     <div className="ulasan-pengunjung">

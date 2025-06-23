@@ -53,6 +53,45 @@ app.post('/api/kunjungan', (req, res) => {
   });
 });
 
+// GET: Ambil semua ulasan
+app.get('/api/ulasan', (req, res) => {
+  db.query('SELECT * FROM ulasan ORDER BY tanggal DESC', (err, result) => {
+    if (err) {
+      console.error('❌ Gagal ambil ulasan:', err);
+      return res.status(500).send('Gagal ambil data ulasan');
+    }
+    res.json(result);
+  });
+});
+
+// POST: Simpan ulasan
+app.post('/api/ulasan', (req, res) => {
+  const { nama, instansi, rating, ulasan } = req.body;
+  const query = 'INSERT INTO ulasan (nama, instansi, rating, ulasan) VALUES (?, ?, ?, ?)';
+  const values = [nama, instansi, rating, ulasan];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('❌ Gagal simpan ulasan:', err);
+      return res.status(500).send('Gagal menyimpan ulasan');
+    }
+    res.json({ message: '✅ Ulasan berhasil disimpan', id: result.insertId });
+  });
+});
+
+
+// Hapus ulasan berdasarkan ID
+app.delete('/api/ulasan/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM ulasan WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error('❌ Gagal menghapus ulasan:', err);
+      return res.status(500).send('Gagal menghapus ulasan');
+    }
+    res.send('✅ Ulasan berhasil dihapus');
+  });
+});
+
 
 // Route PUT: Kirim data ke sekretaris
 app.put('/api/kunjungan/:id/kirim', (req, res) => {

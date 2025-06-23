@@ -1,140 +1,155 @@
 body {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   font-family: 'Poppins', sans-serif;
   background: #f4f6f8;
   margin: 0;
   padding: 0;
+  scrollbar-gutter: stable;
+}
+
+.form-kunjungan .motion-container {
+  overflow: hidden;
 }
 
 /* === WRAPPER === */
-.form-wrapper {
-  padding: 8px;
-  margin-top: 40px;
-  width: 100%;
-  max-width: 360px; /* mengecilkan form */
-  margin-left: auto;
-  margin-right: auto;
+.form-kunjungan .form-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 16px;
   box-sizing: border-box;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 /* === FLIP CONTAINER === */
-.form-flip-container {
+.form-kunjungan .form-flip-container {
+  padding-top: 50px;
   perspective: 1200px;
   width: 100%;
+  max-width: 600px;
+  height: 500px; /* pastikan fixed height */
   position: relative;
-  min-height: 460px;
+  margin: 0 auto;
+  overflow: hidden; /* cegah overflow saat animasi */
+
 }
 
-.form-flip-inner {
-  min-height: 460px;
-  transition: transform 0.7s ease;
-  transform-style: preserve-3d;
-  position: relative;
-}
-
-.form-flip-container.flipped .form-flip-inner {
-  transform: rotateY(180deg);
-}
-
-/* === FORM FACE === */
-.form-face {
-  position: relative;
+.form-kunjungan .form-flip-inner {
   width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
 }
 
-.form-front {
-  z-index: 2;
-}
-
-.form-back {
+.form-kunjungan .form-flip-container.flipped .form-flip-inner {
   transform: rotateY(180deg);
 }
+
+.form-kunjungan .form-face {
+  position: absolute; /* ⬅️ fix critical */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-kunjungan .form-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.form-kunjungan .form-back {
+  transform: rotateY(180deg);
+}
+
 
 /* === ISI FORM === */
-.form-face h2 {
+.form-kunjungan .form-face h2 {
   text-align: center;
-  font-size: 13px;
+  font-size: 25px;
   font-weight: 600;
   color: #1a4d8f;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
-form {
+.form-kunjungan form {
   display: flex;
   flex-direction: column;
+ padding-bottom: 25px; /* beri jarak dari bawah form */
+
 }
 
-form div {
+.form-kunjungan form div {
   margin-bottom: 6px;
 }
 
-form div:last-of-type {
-  margin-bottom: 0; /* pastikan div terakhir tidak dorong tombol */
+.form-kunjungan form div:last-of-type {
+  margin-bottom: 0;
 }
 
-
-form label {
-  font-size: 10px;
-  font-weight: 500;
+.form-kunjungan form label {
+  font-size: 15px;
+  font-weight: 600;
   color: #333;
   margin-bottom: 4px;
   display: block;
 }
 
-form input,
-form textarea {
+.form-kunjungan form input,
+.form-kunjungan form textarea {
   width: 100%;
-  padding: 5px 7px;
-  font-size: 10px;
+  padding: 12px 16px;
+  font-size: 15px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #fff;
 }
 
-form input:focus,
-form textarea:focus {
+.form-kunjungan form input:focus,
+.form-kunjungan form textarea:focus {
   border-color: #1a4d8f;
   box-shadow: 0 0 0 2px rgba(26, 77, 143, 0.15);
   outline: none;
 }
 
-form textarea {
-  min-height: 50px;
+.form-kunjungan form textarea {
+  min-height: 70px;
   resize: vertical;
 }
 
-form button[type="submit"] {
+.form-kunjungan form button[type="submit"] {
   background: linear-gradient(to right, #1a4d8f, #2a71c0);
   color: white;
-  padding: 6px;
-  font-size: 10px;
-  font-weight: 500;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 6px rgba(26, 77, 143, 0.2);
-  margin-top: 8px;
 }
 
-form button[type="submit"]:hover {
+.form-kunjungan form button[type="submit"]:hover {
   background: linear-gradient(to right, #2a71c0, #1a4d8f);
   transform: scale(1.02);
 }
 
 /* === PESAN SUKSES === */
-.success-message {
+.form-kunjungan .success-message {
   background: rgba(0, 255, 128, 0.08);
   color: #1a7f37;
   padding: 6px 10px;
@@ -148,19 +163,19 @@ form button[type="submit"]:hover {
   gap: 6px;
 }
 
-.success-message::before {
+.form-kunjungan .success-message::before {
   content: "✔️";
   font-size: 12px;
 }
 
 /* === TOGGLE SWITCH === */
-.toggle-switch-container {
+.form-kunjungan .toggle-switch-container {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-.toggle-switch {
+.form-kunjungan .toggle-switch {
   position: relative;
   display: flex;
   width: 240px;
@@ -171,7 +186,7 @@ form button[type="submit"]:hover {
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.toggle-switch button {
+.form-kunjungan .toggle-switch button {
   flex: 1;
   font-size: 10px;
   font-weight: 600;
@@ -186,7 +201,7 @@ form button[type="submit"]:hover {
   gap: 5px;
 }
 
-.toggle-switch .slider-bg {
+.form-kunjungan .toggle-switch .slider-bg {
   position: absolute;
   width: 50%;
   height: 100%;
@@ -196,16 +211,108 @@ form button[type="submit"]:hover {
   transition: transform 0.4s ease-in-out;
 }
 
+
+/* Slider Position */
 .toggle-switch.left .slider-bg {
   transform: translateX(0%);
 }
-
 .toggle-switch.right .slider-bg {
   transform: translateX(100%);
 }
 
-.toggle-switch.left button:first-child,
-.toggle-switch.right button:last-child {
-  color: #fff;
-  font-weight: 700;
+
+/* Slider Position */
+.toggle-switch.left .slider-bg {
+  transform: translateX(0%);
+}
+.toggle-switch.right .slider-bg {
+  transform: translateX(100%);
+}
+
+.toggle-switch.right > button:nth-child(2) span,
+.toggle-switch.left > button:nth-child(1) span {
+  color: #fff !important;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+
+  .form-kunjungan .form-wrapper {
+    width: 100%;
+    max-width: 95%;
+    padding: 10px;
+    margin-top: 20px;
+  }
+
+  .form-kunjungan .form-flip-container {
+    height: 520px; /* Sesuaikan tinggi form agar pas */
+    padding-top: 20px;
+  }
+
+  .form-kunjungan .form-face {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .form-kunjungan .form-face h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .form-kunjungan form label {
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+
+  .form-kunjungan form input,
+  .form-kunjungan form textarea {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .form-kunjungan form textarea {
+    min-height: 60px;
+  }
+
+  .form-kunjungan form button[type="submit"] {
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .form-kunjungan .success-message {
+    font-size: 12px;
+    padding: 6px 10px;
+    margin-top: 12px;
+  }
+
+  /* Toggle Switch Styling */
+  .form-kunjungan .toggle-switch-container {
+    margin-top: 20px;
+  }
+
+  .form-kunjungan .toggle-switch {
+    width: 200px;
+    height: 32px;
+  }
+
+  .form-kunjungan .toggle-switch button {
+    font-size: 11px;
+    gap: 4px;
+    padding: 4px 6px;
+  }
+
+  .form-kunjungan .toggle-switch .slider-bg {
+    border-radius: 16px;
+  }
+
+  /* Button active text white */
+  .toggle-switch.left button:first-child span,
+  .toggle-switch.right button:last-child span {
+    color: #fff !important;
+    font-weight: 700;
+  }
 }
