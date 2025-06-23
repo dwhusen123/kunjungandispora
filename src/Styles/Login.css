@@ -1,99 +1,220 @@
-/* src/pages/Login.css */
+/* Login.css */
 
 .login-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f6f8;
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  .login-page h2 {
-    font-size: 28px;
-    color: #1a4d8f;
-    margin-bottom: 20px;
-  }
-  
-  .login-page form {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-  }
-  
-  .login-page form div {
-    margin-bottom: 15px;
-  }
-  
-  .login-page form label {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 5px;
-    display: block;
-    text-align: left;
-  }
-  
-  .login-page form input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-top: 5px;
-  }
-  
-  .login-page form button {
-    background-color: #1a4d8f;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 15px;
-  }
-  
-  .login-page form button:hover {
-    background-color: #163f76;
-  }
-  
-  .login-page .footer {
-    margin-top: 20px;
-    font-size: 14px;
-    color: #888;
-  }
-  
-  .login-page .footer a {
-    color: #1a4d8f;
-    text-decoration: none;
-  }
-  
-  .login-page .footer a:hover {
-    text-decoration: underline;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  font-family: 'Poppins', sans-serif;
+  padding-top: 40px;
+}
+
+/* Flip Container */
+.form-flip-container {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 420px;
+  height: 400px;
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Inner wrapper untuk kedua sisi */
+.form-flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 1s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+/* Flip trigger */
+.form-flip-container.flipped .form-flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* Muka & Belakang Form */
+.form-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: #ffffff;
+  backface-visibility: hidden;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transform: rotateY(0deg);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Efek bayangan berbeda saat hover untuk kesan 3D aktif */
+.form-face:hover {
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.25),
+    0 6px 10px rgba(0, 0, 0, 0.12);
+}
+
+.form-front {
+  z-index: 2;
+}
+
+.form-back {
+  transform: rotateY(180deg);
+}
+
+/* Form Fields */
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+  text-align: left;
+}
+
+form input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Submit Button */
+form button[type="submit"] {
+  margin-top: 15px;
+  padding: 12px;
+  width: 100%;
+  font-size: 18px;
+  background-color: #1a4d8f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+form button[type="submit"]:hover {
+  background-color: #163f76;
+}
+/* === SLIDER TOGGLE MODERN === */
+.role-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  width: 260px;
+  height: 50px;
+  margin-top: 45px;
+  background: linear-gradient(145deg, #e6e6e6, #ffffff);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: inset -3px -3px 7px rgba(255, 255, 255, 0.8),
+              inset 3px 3px 6px rgba(0, 0, 0, 0.05),
+              0 6px 12px rgba(0, 0, 0, 0.1);
+  transition: background 0.4s ease;
+}
+
+.role-toggle-wrapper .slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 124px;
+  height: 44px;
+  background: linear-gradient(to right, #1a4d8f, #2a6bd8);
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(26, 77, 143, 0.4),
+              inset 0 -2px 4px rgba(255, 255, 255, 0.3);
+  transition: all 0.4s ease;
+  z-index: 0;
+}
+
+.role-toggle-wrapper.sekretaris .slider {
+  left: 133px;
+}
+
+.role-toggle-wrapper .label {
+  flex: 1;
+  text-align: center;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #333;
+  z-index: 1;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+}
+
+.role-toggle-wrapper .label span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.role-toggle-wrapper.admin .label:-child {
+  color: #fff;
+}
+
+.role-toggle-wrapper.sekretaris .label:last-child {
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .form-flip-container {
+    max-width: 92%;      /* dari 420px jadi relatif */
+    height: 360px;       /* sedikit dikurangi dari 400px */
   }
 
-  .login-links {
-    margin-top: 15px;
-    text-align: center;
+  .form-face {
+    padding: 20px;       /* lebih kecil */
   }
-  
-  .link-button {
-    background: none;
-    border: none;
-    color: #1a4d8f;
-    cursor: pointer;
-    text-decoration: underline;
+
+  form label {
     font-size: 14px;
-    padding: 0;
   }
-  
-  .link-button:hover {
-    color: #163f76;
+
+  form input {
+    padding: 10px;
+    font-size: 14px;
   }
-  
+
+  form button[type="submit"] {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .login-page {
+    padding-top: 30px;
+  }
+
+
+  .role-toggle-wrapper {
+    width: 210px;
+    height: 42px;
+  }
+
+  .role-toggle-wrapper .slider {
+    width: 102px;
+    height: 36px;
+  }
+
+  .role-toggle-wrapper.sekretaris .slider {
+    left: 105px;
+  }
+
+  .role-toggle-wrapper .label {
+    font-size: 12.5px;
+  }
+}

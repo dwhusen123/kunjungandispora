@@ -5,17 +5,17 @@ body {
 
 
 .form-kunjungan {
-  padding: 10px;
+  padding: 8px;
   background: rgba(255, 255, 255, 0.15);
-  max-width: 540px;
-  margin: 20px auto 20px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  max-width: 500px; /* lebih ramping dari 540px */
+  margin: 30px auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(8px);
   animation: slideFadeIn 0.8s ease-out;
-  transition: transform 0.5s ease;
-  margin-top: 50px;
+  transform: scale(0.96); /* mengecilkan keseluruhan form sedikit */
+  transition: transform 0.4s ease;
 }
 
 /* Animasi smooth muncul dari bawah */
@@ -33,9 +33,9 @@ body {
 .form-kunjungan h2 {
   text-align: center;
   color: #1a4d8f;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   font-weight: 600;
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .form-kunjungan form {
@@ -52,18 +52,18 @@ body {
   font-weight: 500;
   color: #333;
   display: block;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .form-kunjungan form input,
 .form-kunjungan form textarea {
   width: 100%;
-  padding: 11px 14px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 7px;
   background-color: #fefefe;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
-  font-size: 14px;
+  font-size: 13px;
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -82,11 +82,11 @@ body {
 .form-kunjungan form button {
   background: linear-gradient(to right, #1a4d8f, #2a71c0);
   color: white;
-  padding: 12px;
-  font-size: 15px;
+  padding: 10px;
+  font-size: 14px;
   font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 7px;
   cursor: pointer;
   box-shadow: 0 6px 16px rgba(26, 77, 143, 0.25);
   transition: background 0.3s ease, transform 0.2s;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../Styles/FormKunjungan.css';
 import Navbar from '../components/Navbar/Navbar';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 const FormKunjungan = () => {
   const [nama, setNama] = useState('');
@@ -44,7 +45,12 @@ const FormKunjungan = () => {
   return (
     <>
       <Navbar />
-      <div className="form-kunjungan animated-form">
+      <motion.div
+        className="form-kunjungan animated-form"
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         <h2>Form Input Kunjungan</h2>
 
         {successMessage && (
@@ -92,7 +98,7 @@ const FormKunjungan = () => {
           </div>
           <button type="submit">Kirim</button>
         </form>
-      </div>
+      </motion.div>
     </>
   );
 };
