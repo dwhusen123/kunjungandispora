@@ -6,7 +6,6 @@ import LoginPegawai from './pages/LoginPegawai';
 import DashboardAdmin from './pages/DashboardAdmin';
 import DashboardSekretaris from './pages/DashboardSekretaris';
 import AdminProfile from './pages/AdminProfile';
-import UlasanPengunjung from './pages/UlasanPengunjung';
 
 function App() {
   return (
@@ -18,7 +17,6 @@ function App() {
         <Route path="/dashboard-admin" element= {<DashboardAdmin />} />
         <Route path="/dashboard-sekretaris" element= {<DashboardSekretaris />} />
         <Route path="/admin/profile" element={<AdminProfile />} />
-        <Route path="/ulasan" element={<UlasanPengunjung />} />
       </Routes>
     </Router>
   );
