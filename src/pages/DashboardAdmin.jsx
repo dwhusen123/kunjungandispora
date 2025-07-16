@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Navbar from '../components/Navbar/Navbar';
 import { FaUserCircle, FaBell } from 'react-icons/fa';
 import '../Styles/DashboardAdmin.css';
+import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart, Bar, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
@@ -12,36 +13,36 @@ const DashboardAdmin = () => {
   const [activeMenu, setActiveMenu] = useState('dashboard');
   const [isEditing, setIsEditing] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('tanggal_desc');
   const sidebarRef = useRef(null);
-  const [profile, setProfile] = useState({
-    nama: 'Admin Dispora',
-    email: 'admin@dispora.go.id',
-    role: 'Administrator',
+  const [adminProfil, setAdminProfil] = useState({
+    nama: 'Yudi Saputra, S.T, M.T',
+    jabatan: 'Admin DISPORA Sumsel',
+    email: 'Yudisaputra@dispora.go.id',
+    telp: '0812-3456-7890'
   });
 
-useEffect(() => {
-  // Handle klik di luar sidebar untuk menutupnya
-  const handleClickOutside = (event) => {
-    if (
-      isSidebarOpen &&
-      sidebarRef.current &&
-      !sidebarRef.current.contains(event.target)
-    ) {
-      setIsSidebarOpen(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isSidebarOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target)
+      ) {
+        setIsSidebarOpen(false);
+      }
+    };
 
-  document.addEventListener('mousedown', handleClickOutside);
-
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, [isSidebarOpen]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSidebarOpen]);
 
 useEffect(() => {
   const fetchDataKunjungan = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/kunjungan');
+      const response = await fetch('https://monitoring-backend-production-55e5.up.railway.app/kunjungan');
       const data = await response.json();
       const sorted = data.sort((a, b) => new Date(b.tanggal_kunjungan) - new Date(a.tanggal_kunjungan));
       setPengunjungData(sorted);
@@ -64,16 +65,12 @@ useEffect(() => {
   fetchUlasan();
 
   // Ambil profil dari localStorage (jika ada)
-  const storedProfile = JSON.parse(localStorage.getItem('adminProfile'));
-  if (storedProfile) {
-    setProfile(storedProfile);
-  }
+  const storedProfile = JSON.parse(localStorage.getItem('adminProfil'));
+    if (storedProfile) {
+      setAdminProfil(storedProfile);
+    }
 }, []);
 
-
-  const filteredData = pengunjungData.filter((item) =>
-    item.nama?.toLowerCase().includes(search.toLowerCase())
-  );
 
   const groupByDate = (data, type = 'daily') => {
     const result = {};
@@ -87,59 +84,150 @@ useEffect(() => {
     return Object.entries(result).map(([tanggal, jumlah]) => ({ tanggal, jumlah }));
   };
 
-  const renderDashboard = () => (
-    <div className="dashboard-stats">
-      <h2>Selamat Datang Admin</h2>
-      <p>Total Kunjungan: <strong>{pengunjungData.length}</strong></p>
-      <p>Total Ulasan: <strong>{ulasanList.length}</strong></p>
-      <p>Pengunjung Hari Ini: <strong>{pengunjungData.filter(d =>
-        new Date(d.tanggal_kunjungan).toDateString() === new Date().toDateString()
-      ).length}</strong></p>
-    </div>
-  );
+  const statusData = [
+  { status: 'Menunggu', jumlah: pengunjungData.filter(d => !d.status || d.status === 'menunggu').length },
+  { status: 'Dikirim', jumlah: pengunjungData.filter(d => d.status === 'dikirim ke sekretaris').length },
+  { status: 'Tervalidasi', jumlah: pengunjungData.filter(d => d.status === 'sudah divalidasi').length },
+];
 
-  const renderDataPengunjung = () => (
+  const pieColors = ['#FF7A00', '#1a4d8f', '#2E8B57'];
+
+
+  const renderDashboard = () => (
+  <div className="dashboard-stats">
+<h2 className="dashboard-title">Selamat Datang Admin Dispora</h2>
+    <div className="stats-grid">
+      <div className="stat-card card-blue">
+        <div className="stat-icon">📊</div>
+        <div className="stat-info">
+          <h3>Total Kunjungan</h3>
+          <p>{pengunjungData.length}</p>
+        </div>
+      </div>
+      <div className="stat-card card-green">
+        <div className="stat-icon">📝</div>
+        <div className="stat-info">
+          <h3>Total Ulasan</h3>
+          <p>{ulasanList.length}</p>
+        </div>
+      </div>
+      <div className="stat-card card-orange">
+        <div className="stat-icon">👥</div>
+        <div className="stat-info">
+          <h3>Hari Ini</h3>
+          <p>{pengunjungData.filter(d =>
+            new Date(d.tanggal_kunjungan).toDateString() === new Date().toDateString()
+          ).length}</p>
+        </div>
+      </div>
+    </div>
+<div className="mini-statistik" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+  <h3>Status Validasi Kunjungan</h3>
+  <ResponsiveContainer width="100%" height={200}>
+    <PieChart>
+      <Pie
+        data={statusData}
+        dataKey="jumlah"
+        nameKey="status"
+        cx="50%"
+        cy="50%"
+        outerRadius={60}
+        innerRadius={30}
+        label
+      >
+        {statusData.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend verticalAlign="bottom" height={10} />
+    </PieChart>
+  </ResponsiveContainer>
+</div>
+  </div>
+);
+
+
+const renderDataPengunjung = () => {
+  const sortedData = [...pengunjungData].sort((a, b) => {
+    switch (sortBy) {
+      case 'nama_asc':
+        return a.nama.localeCompare(b.nama);
+      case 'tanggal_desc':
+        return new Date(b.tanggal_kunjungan) - new Date(a.tanggal_kunjungan);
+      case 'status':
+        return (a.status || '').localeCompare(b.status || '');
+      default:
+        return 0;
+    }
+  });
+
+  return (
     <div className="data-pengunjung">
-      <h2>Data Pengunjung</h2>
-      <div className="dashboard-controls">
-        <input
+       <div className="data-pengunjung">
+    <h2>Data Pengunjung</h2>
+    <div className="dashboard-controls">
+      <input
           type="text"
           placeholder="Cari berdasarkan nama..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama</th>
-            <th>Tanggal</th>
-            <th>Instansi</th>
-            <th>Keperluan</th>
-            <th>Status</th>
-            <th>Aksi</th>
+      <label htmlFor="sort">Urut Berdasarkan:</label>
+      <select
+        id="sort"
+        value={sortBy}
+        onChange={(e) => setSortBy(e.target.value)}
+        style={{ marginLeft: '10px' }}
+      >
+        <option value="nama_asc">Nama</option>
+        <option value="tanggal_desc">Tanggal Kunjungan</option>
+        <option value="status">Status</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>Tanggal</th>
+          <th>Instansi</th>
+          <th>Keperluan</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sortedData
+        .filter((data) =>
+      data.nama.toLowerCase().includes(search.toLowerCase()) )
+        .map((data) => (
+          <tr key={data.id}>
+            <td>{data.nama}</td>
+            <td>{new Date(data.tanggal_kunjungan).toLocaleDateString('id-ID')}</td>
+            <td>{data.instansi}</td>
+            <td>{data.keperluan}</td>
+            <td>{data.status || 'menunggu'}</td>
+            <td style={{ display: 'flex', gap: '8px' }}>
+              {data.status !== 'dikirim ke sekretaris' && data.status !== 'sudah divalidasi' && (
+                <button onClick={() => handleKirim(data.id)}>Kirim</button>
+              )}
+              <button
+                onClick={() => handleHapus(data.id)}
+                style={{ backgroundColor: 'red', color: 'white' }}
+              >
+                Hapus
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {filteredData.map((data) => (
-            <tr key={data.id}>
-              <td>{data.nama}</td>
-              <td>{new Date(data.tanggal_kunjungan).toLocaleDateString('id-ID')}</td>
-              <td>{data.instansi}</td>
-              <td>{data.keperluan}</td>
-              <td>{data.status || 'menunggu'}</td>
-              <td style={{ display: 'flex', gap: '8px' }}>
-  {data.status !== 'dikirim ke sekretaris' && data.status !== 'sudah divalidasi' && (
-    <button onClick={() => handleKirim(data.id)}>Kirim</button>)}
-    <button onClick={() => handleHapus(data.id)}
-    style={{ backgroundColor: 'red', color: 'white' }}>Hapus</button>
-</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </tbody>
+    </table>
+  </div>
     </div>
   );
+};
+
 
 const handleKirim = async (id) => {
   const confirmed = window.confirm('Kirim data ini ke sekretaris?');
@@ -181,6 +269,28 @@ const handleHapus = async (id) => {
   }
 };
 
+ const handleKirimUlasan = async (id) => {
+  const confirmed = window.confirm('Kirim ulasan ini ke sekretaris?');
+  if (!confirmed) return;
+
+  try {
+    const res = await axios.put(`http://localhost:5001/api/ulasan/${id}/kirim`);
+    if (res.status === 200) {
+      const updated = ulasanList.map((item) =>
+        item.id === id ? { ...item, status: 'dikirim ke sekretaris' } : item
+      );
+      setUlasanList(updated);
+      localStorage.setItem('ulasanSekretaris', JSON.stringify(updated.filter(item => item.status === 'dikirim ke sekretaris')));
+      alert('✅ Ulasan berhasil dikirim ke sekretaris!');
+    } else {
+      alert('❌ Gagal mengirim ulasan.');
+    }
+  } catch (err) {
+    console.error('❌ Gagal mengirim ulasan:', err);
+    alert('Terjadi kesalahan saat mengirim ulasan.');
+  }
+};
+
  const handleHapusUlasan = async (id) => {
   const confirmed = window.confirm('Apakah Anda yakin ingin menghapus ulasan ini?');
   if (!confirmed) return;
@@ -197,9 +307,51 @@ const handleHapus = async (id) => {
 };
 
 
-  const renderUlasan = () => (
+const renderUlasan = () => {
+  const formatTanggal = (tgl) =>
+    new Date(tgl).toLocaleDateString('id-ID');
+
+const renderTombolAksi = (item) => (
+  <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+    {item.status !== 'dikirim ke sekretaris' && (
+      <button
+        style={{
+          fontSize: '12px',
+          padding: '4px 10px',
+          borderRadius: '4px',
+          backgroundColor: '#1a4d8f',
+          color: '#fff',
+          border: 'none',
+          cursor: 'pointer'
+        }}
+        onClick={() => handleKirimUlasan(item.id)}
+      >
+        Kirim
+      </button>
+    )}
+    <button
+      style={{
+        fontSize: '12px',
+        padding: '4px 10px',
+        borderRadius: '4px',
+        backgroundColor: '#d9534f',
+        color: '#fff',
+        border: 'none',
+        cursor: 'pointer'
+      }}
+      onClick={() => handleHapusUlasan(item.id)}
+    >
+      Hapus
+    </button>
+  </div>
+);
+
+
+
+  return (
     <div className="ulasan-pengunjung">
       <h2 className="section-title">Ulasan Pengunjung</h2>
+
       {ulasanList.length === 0 ? (
         <p>Tidak ada ulasan saat ini.</p>
       ) : (
@@ -220,12 +372,8 @@ const handleHapus = async (id) => {
                   <td>{item.nama}</td>
                   <td>{item.rating} ⭐</td>
                   <td>{item.ulasan}</td>
-                  <td>{new Date(item.tanggal).toLocaleDateString('id-ID')}</td>
-                  <td>
-                    <button className="btn-hapus" onClick={() => handleHapusUlasan(item.id)}>
-                      Hapus
-                    </button>
-                  </td>
+                  <td>{formatTanggal(item.tanggal)}</td>
+                  <td>{renderTombolAksi(item)}</td>
                 </tr>
               ))}
             </tbody>
@@ -234,6 +382,8 @@ const handleHapus = async (id) => {
       )}
     </div>
   );
+};
+
 
   const renderStatistik = () => {
     const dailyData = groupByDate(pengunjungData, 'daily');
@@ -254,7 +404,7 @@ const handleHapus = async (id) => {
               <XAxis dataKey="tanggal" />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Line type="monotone" dataKey="jumlah" stroke="#8884d8" activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="jumlah" stroke="#FF7A00" activeDot={{ r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -267,7 +417,7 @@ const handleHapus = async (id) => {
               <XAxis dataKey="tanggal" />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="jumlah" fill="#82ca9d" />
+              <Bar dataKey="jumlah" fill="#2E8B57" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -275,42 +425,45 @@ const handleHapus = async (id) => {
     );
   };
 
-  const handleProfileChange = (e) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
+const handleProfilChange = (e) => {
+    const { name, value } = e.target;
+    setAdminProfil((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleProfileSave = () => {
+  const handleSaveProfil = () => {
     setIsEditing(false);
-    localStorage.setItem('adminProfile', JSON.stringify(profile));
-    alert('Profil berhasil diperbarui.');
+    localStorage.setItem('adminProfil', JSON.stringify(adminProfil));
+    alert('✅ Profil berhasil disimpan!');
   };
 
   const renderProfil = () => (
     <div className="profil-admin">
-      <h2><FaUserCircle size={40} style={{ marginRight: 10 }} /> Profil Admin</h2>
-      <div className="profil-info">
-        <label>Nama:</label>
+      <h2>Profil Admin</h2>
+      <div style={{ backgroundColor: '#f8f9fa', padding: '20px', borderRadius: '8px', maxWidth: '400px' }}>
         {isEditing ? (
-          <input type="text" name="nama" value={profile.nama} onChange={handleProfileChange} />
+          <>
+            <p><strong>Nama:</strong> <input type="text" name="nama" value={adminProfil.nama} onChange={handleProfilChange} /></p>
+            <p><strong>Jabatan:</strong> <input type="text" name="jabatan" value={adminProfil.jabatan} onChange={handleProfilChange} /></p>
+            <p><strong>Email:</strong> <input type="email" name="email" value={adminProfil.email} onChange={handleProfilChange} /></p>
+            <p><strong>No. Telepon:</strong> <input type="text" name="telp" value={adminProfil.telp} onChange={handleProfilChange} /></p>
+            <button onClick={handleSaveProfil} style={{ backgroundColor: '#28a745', color: '#fff', padding: '6px 12px', border: 'none', borderRadius: '4px' }}>Simpan</button>
+          </>
         ) : (
-          <p>{profile.nama}</p>
-        )}
-        <label>Email:</label>
-        {isEditing ? (
-          <input type="email" name="email" value={profile.email} onChange={handleProfileChange} />
-        ) : (
-          <p>{profile.email}</p>
-        )}
-        <label>Role:</label>
-        <p><span className="role-badge">{profile.role}</span></p>
-        {isEditing ? (
-          <button className="btn-save" onClick={handleProfileSave}>Simpan</button>
-        ) : (
-          <button className="btn-edit" onClick={() => setIsEditing(true)}>Edit Profil</button>
+          <>
+            <p><strong>Nama:</strong> {adminProfil.nama}</p>
+            <p><strong>Jabatan:</strong> {adminProfil.jabatan}</p>
+            <p><strong>Email:</strong> {adminProfil.email}</p>
+            <p><strong>No. Telepon:</strong> {adminProfil.telp}</p>
+            <button onClick={() => setIsEditing(true)} style={{ backgroundColor: '#007bff', color: '#fff', padding: '6px 12px', border: 'none', borderRadius: '4px' }}>Edit Profil</button>
+          </>
         )}
       </div>
     </div>
   );
+  
 
   const handleLogout = () => {
     const confirmLogout = window.confirm('Apakah Anda yakin ingin logout?');
@@ -325,16 +478,19 @@ const handleHapus = async (id) => {
          ☰
       </button>
       <div className={`sidebar ${isSidebarOpen ? 'show' : ''}`} ref={sidebarRef}>
-        <h3>Admin Panel</h3>
-        <ul>
-          <li><button onClick={() => setActiveMenu('dashboard')} className={`sidebar-button ${activeMenu === 'dashboard' ? 'active' : ''}`}>Dashboard</button></li>
-          <li><button onClick={() => setActiveMenu('data')} className={`sidebar-button ${activeMenu === 'data' ? 'active' : ''}`}>Data Pengunjung</button></li>
-          <li><button onClick={() => setActiveMenu('ulasan')} className={`sidebar-button ${activeMenu === 'ulasan' ? 'active' : ''}`}>Ulasan Pengunjung</button></li>
-          <li><button onClick={() => setActiveMenu('statistik')} className={`sidebar-button ${activeMenu === 'statistik' ? 'active' : ''}`}>Statistik</button></li>
-          <li><button onClick={() => setActiveMenu('profil')} className={`sidebar-button ${activeMenu === 'profil' ? 'active' : ''}`}>Profil</button></li>
-          <li><button onClick={handleLogout} className="sidebar-button">Logout</button></li>
-        </ul>
-      </div>
+  <div className="sidebar-header">
+    <h3>Admin Dispora</h3>
+  </div>
+  <ul className="sidebar-menu">
+    <li><button onClick={() => setActiveMenu('dashboard')} className={`sidebar-button ${activeMenu === 'dashboard' ? 'active' : ''}`}><span>📊</span> Dashboard</button></li>
+    <li><button onClick={() => setActiveMenu('data')} className={`sidebar-button ${activeMenu === 'data' ? 'active' : ''}`}><span>👥</span> Data Pengunjung</button></li>
+    <li><button onClick={() => setActiveMenu('ulasan')} className={`sidebar-button ${activeMenu === 'ulasan' ? 'active' : ''}`}><span>📝</span> Ulasan</button></li>
+    <li><button onClick={() => setActiveMenu('statistik')} className={`sidebar-button ${activeMenu === 'statistik' ? 'active' : ''}`}><span>📈</span> Statistik</button></li>
+    <li><button onClick={() => setActiveMenu('profil')} className={`sidebar-button ${activeMenu === 'profil' ? 'active' : ''}`}><span>👤</span> Profil</button></li>
+    <li><button onClick={handleLogout} className="sidebar-button"><span>🚪</span> Logout</button></li>
+  </ul>
+</div>
+
       <div className="main-content">
         <Navbar />
         {activeMenu === 'dashboard' && renderDashboard()}

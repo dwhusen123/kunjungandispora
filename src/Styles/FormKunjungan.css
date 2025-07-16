@@ -234,6 +234,144 @@ body {
   color: #fff !important;
 }
 
+/* === PREVIEW OVERLAY === */
+.preview-overlay {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: white;
+  border-radius: 10px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.preview-box h3 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+  padding-bottom: 6px;
+  display: inline-block;
+}
+
+.preview-box p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.preview-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-print, .btn-back {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-back {
+  background-color: #95a5a6;
+}
+
+.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-left: 6px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === CETAK STYLE === */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #bukti-kunjungan, #bukti-kunjungan * {
+    visibility: visible;
+  }
+
+  #bukti-kunjungan {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-family: 'Poppins', sans-serif;
+    color: #000;
+    text-align: center;
+  }
+
+  #bukti-kunjungan h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 2px solid #000;
+    padding-bottom: 6px;
+    text-align: center !important;
+
+  }
+
+  #bukti-kunjungan p {
+    font-size: 14px;
+    margin: 6px 0;
+    text-align: center !important;
+
+  }
+
+  #bukti-kunjungan .info-item {
+    margin: 10px 0;
+    font-size: 16px;
+  }
+
+  .preview-buttons, .navbar {
+    display: none !important;
+  }
+
+  #bukti-kunjungan .signature {
+    margin-top: 60px;
+    text-align: right;
+    font-size: 16px;
+  }
+
+  #bukti-kunjungan .signature::before {
+    content: "____________________";
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+
 /* === RESPONSIVE === */
 @media (max-width: 480px) {
   body {
@@ -316,3 +454,5 @@ body {
     font-weight: 700;
   }
 }
+
+
